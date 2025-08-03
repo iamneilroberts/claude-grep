@@ -15,11 +15,31 @@ Grep-like tool for searching Claude conversation history with powerful filtering
 
 ## Installation
 
+### NPM (Recommended)
 ```bash
 npm install -g claude-grep
 ```
 
-For Claude Desktop integration, add to your MCP settings:
+### From Source
+```bash
+git clone https://github.com/iamneilroberts/claude-grep.git
+cd claude-grep
+npm install
+npm run build
+npm link
+```
+
+## MCP (Model Context Protocol) Configuration
+
+claude-grep integrates with Claude Desktop through MCP, allowing you to search conversations directly within Claude.
+
+### Setting up MCP for Claude Desktop
+
+1. **Open Claude Desktop settings**
+   - On macOS: `Claude` → `Settings` → `Developer` → `Edit Config`
+   - On Windows: `File` → `Preferences` → `Developer` → `Edit Config`
+
+2. **Add claude-grep to your MCP settings:**
 
 ```json
 {
@@ -31,6 +51,40 @@ For Claude Desktop integration, add to your MCP settings:
   }
 }
 ```
+
+3. **Restart Claude Desktop** for the changes to take effect.
+
+### Alternative MCP Configuration (Local Installation)
+
+If you installed from source or want to use a specific installation:
+
+```json
+{
+  "mcpServers": {
+    "claude-grep": {
+      "command": "node",
+      "args": ["/path/to/claude-grep/dist/mcp/server.js"]
+    }
+  }
+}
+```
+
+### Using claude-grep in Claude Desktop
+
+Once configured, you can use natural language to search your conversations:
+
+- "Search for conversations about TypeScript errors"
+- "Find where we discussed the authentication system"
+- "Show me conversations mentioning package.json"
+- "Export conversation abc123 to a file"
+
+The MCP integration provides these tools:
+- `search_conversations` - Search with keywords
+- `search_for_files` - Find conversations mentioning specific files
+- `get_conversation_details` - View full conversation
+- `export_conversation` - Export conversation to file (great for Claude's compact view)
+- `list_projects` - See all your projects
+- `switch_project` - Change active project
 
 ## Quick Start
 
@@ -131,6 +185,49 @@ npm run dev
 
 # Run tests
 npm test
+```
+
+## Troubleshooting
+
+### MCP Connection Issues
+
+If claude-grep isn't working in Claude Desktop:
+
+1. **Check the configuration path**
+   - Ensure the config file is saved in the correct location
+   - Common locations:
+     - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+     - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+2. **Verify installation**
+   ```bash
+   # Check if claude-grep is installed globally
+   npm list -g claude-grep
+   
+   # Test MCP server directly
+   npx claude-grep mcp
+   ```
+
+3. **Check Claude Desktop logs**
+   - Open Developer Tools in Claude Desktop
+   - Look for MCP-related errors in the console
+
+4. **Common fixes**
+   - Restart Claude Desktop after configuration changes
+   - Ensure you have the latest version of claude-grep
+   - Check that Node.js is in your system PATH
+
+### Permission Issues
+
+If you encounter permission errors:
+
+```bash
+# On macOS/Linux
+sudo npm install -g claude-grep
+
+# Or use a Node version manager like nvm
+nvm use 18
+npm install -g claude-grep
 ```
 
 ## License
