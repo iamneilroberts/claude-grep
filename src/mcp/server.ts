@@ -6,6 +6,9 @@ import {
   ListToolsRequestSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import * as os from 'os';
 import { SearchEngine } from '../core/search.js';
 import { ConversationScanner } from '../core/scanner.js';
 import { ResultProcessor } from '../core/results.js';
@@ -22,6 +25,7 @@ import {
   createProjectTools,
   createPreferencesTools,
   createWebTools,
+  createExportConversationTool,
 } from './tools/index.js';
 import { formatResults } from './formatters/index.js';
 
@@ -70,6 +74,7 @@ export class ClaudeGrepMCPServer {
         ...createSearchTool(),
         ...createSearchFilesTool(),
         ...createGetConversationTool(),
+        ...createExportConversationTool(),
         ...createProjectTools(),
         ...createPreferencesTools(),
       ];
@@ -127,6 +132,9 @@ export class ClaudeGrepMCPServer {
           
           case 'open_web_interface':
             return await this.handleOpenWebInterface();
+          
+          case 'export_conversation':
+            return await this.handleExportConversation(args);
           
           default:
             throw new Error(`Unknown tool: ${name}`);
@@ -380,6 +388,67 @@ export class ClaudeGrepMCPServer {
 
   setWebInterfaceUrl(url: string): void {
     this.webInterfaceUrl = url;
+  }
+
+  private async handleExportConversation(args: any): Promise<any> {
+    const { 
+      sessionId, 
+      format = 'markdown',
+      outputPath,
+      includeMetadata = true
+    } = args;
+    
+    try {
+      // Load conversation details
+      const details = await this.conversationLoader.loadConversation(sessionId);
+      
+      if (!details) {
+        return {
+          content: [{
+            type: 'text',
+            text: `Conversation ${sessionId} not found.`
+          }]
+        };
+      }
+      
+      // Format conversation content
+      const formatted = this.conversationLoader.formatConversation(
+        details,
+        format === 'html' ? 'markdown' : format // HTML not supported yet, use markdown
+      );
+      
+      // Determine output path
+      let filePath: string;
+      if (outputPath) {
+        filePath = outputPath;
+      } else {
+        // Default to ~/.claude-grep/exports/
+        const exportDir = path.join(os.homedir(), '.claude-grep', 'exports');
+        await fs.mkdir(exportDir, { recursive: true });
+        
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+        const extension = format === 'json' ? 'json' : format === 'html' ? 'html' : 'md';
+        filePath = path.join(exportDir, `${sessionId.slice(0, 8)}-${timestamp}.${extension}`);
+      }
+      
+      // Write to file
+      await fs.writeFile(filePath, formatted, 'utf-8');
+      
+      // Return success message with file path
+      return {
+        content: [{
+          type: 'text',
+          text: `Conversation exported successfully!\n\nFile saved to: ${filePath}\n\nYou can open this file in your preferred editor to view the full conversation details.`
+        }]
+      };
+    } catch (error) {
+      return {
+        content: [{
+          type: 'text',
+          text: `Error exporting conversation: ${error instanceof Error ? error.message : String(error)}`
+        }]
+      };
+    }
   }
 
   private parseTimeRange(timeRange?: string): { start?: Date; end?: Date } | undefined {

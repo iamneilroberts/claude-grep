@@ -225,3 +225,33 @@ export function createWebTools(): Tool[] {
     }
   ];
 }
+
+export function createExportConversationTool(): Tool[] {
+  return [{
+    name: 'export_conversation',
+    description: 'Export full conversation details to a file for easy viewing outside Claude Code',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        sessionId: {
+          type: 'string',
+          description: 'Session ID of the conversation to export'
+        },
+        format: {
+          type: 'string',
+          enum: ['markdown', 'json', 'html'],
+          description: 'Export format (default: markdown)'
+        },
+        outputPath: {
+          type: 'string',
+          description: 'Optional custom output path. If not provided, exports to ~/.claude-grep/exports/'
+        },
+        includeMetadata: {
+          type: 'boolean',
+          description: 'Include conversation metadata in export (default: true)'
+        }
+      },
+      required: ['sessionId']
+    }
+  }];
+}
