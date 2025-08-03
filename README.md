@@ -2,6 +2,8 @@
 
 Grep-like tool for searching Claude conversation history with powerful filtering, multiple output formats, and project-aware context.
 
+![Claude Grep Web UI](docs/images/web-ui-overview.png)
+
 ## Features
 
 - **Comprehensive Search**: Find conversations by keywords, files, errors, or patterns
@@ -47,6 +49,8 @@ claude-grep search "bug fix" --project my-project
 # Exhaustive search (slower but complete)
 claude-grep search "edge case" --exhaustive
 ```
+
+![CLI Table Output](docs/images/cli-table-output.png)
 
 ### In Claude Desktop
 
@@ -99,6 +103,8 @@ The web interface provides:
 - Conversation drill-down with in-conversation search
 - Multiple output format support
 - Claude-inspired dark theme
+
+![Web UI Search Results](docs/images/web-ui-search.png)
 
 **Security Note**: The web server is designed for local use only. Your conversation data never leaves your machine. Do not expose the web server to the internet as it does not include authentication.
 
