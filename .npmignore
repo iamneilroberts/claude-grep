@@ -1,0 +1,52 @@
+# Development files
+.project/
+test/
+src/
+.vscode/
+.idea/
+*.local.md
+.scratch/
+test-mcp.js
+fix-imports.js
+
+# Source files (we ship compiled JS)
+*.ts
+*.tsx
+!*.d.ts
+
+# Configuration files
+.eslintrc.json
+.prettierrc
+jest.config.js
+tsconfig.json
+vite.config.ts
+.editorconfig
+
+# Git and CI
+.git/
+.github/
+.gitignore
+.husky/
+
+# Documentation source
+docs/
+*.md
+!README.md
+!LICENSE
+
+# Build artifacts
+coverage/
+.nyc_output/
+*.log
+.DS_Store
+Thumbs.db
+
+# Local configuration
+.env
+.env.*
+preferences.json
+.mcp.json
+
+# Development dependencies
+node_modules/
+package-lock.json

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Grep</title>
+    <link rel="stylesheet" href="styles-compact.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Claude Grep</h1>
+            <div class="project-selector">
+                <label for="project-select">Project:</label>
+                <select id="project-select">
+                    <option value="">Loading...</option>
+                </select>
+                <button id="refresh-projects" title="Refresh projects">↻</button>
+            </div>
+        </header>
+
+        <main>
+            <section class="search-section">
+                <form id="search-form">
+                    <div class="search-bar">
+                        <input 
+                            type="text" 
+                            id="query" 
+                            name="query" 
+                            placeholder="Search conversations..."
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit">Search</button>
+                    </div>
+                    
+                    <details class="advanced-options">
+                        <summary>Advanced Options</summary>
+                        <div class="options-grid">
+                            <label>
+                                <input type="checkbox" name="searchAllProjects">
+                                Search all projects
+                            </label>
+                            <label>
+                                <input type="checkbox" name="exhaustive">
+                                Exhaustive search (slower)
+                            </label>
+                            <label>
+                                <input type="checkbox" name="includeErrors">
+                                Include errors
+                            </label>
+                            <label>
+                                <input type="checkbox" name="includeToolCalls">
+                                Include tool calls
+                            </label>
+                            <label>
+                                Max results:
+                                <input type="number" name="maxResults" value="20" min="1" max="1000">
+                            </label>
+                            <label>
+                                Format:
+                                <select name="format">
+                                    <option value="table">Table</option>
+                                    <option value="list">List</option>
+                                    <option value="markdown">Markdown</option>
+                                    <option value="json">JSON</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+                            </label>
+                        </div>
+                    </details>
+                </form>
+            </section>
+
+            <section class="progress-section" id="progress" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text">Searching...</div>
+            </section>
+
+            <section class="results-section">
+                <div id="results-header" style="display: none;">
+                    <h2>Results</h2>
+                    <div class="results-stats" id="results-stats"></div>
+                </div>
+                <div class="results-layout">
+                    <div id="results-container" class="results-list"></div>
+                    <div id="detail-panel" class="detail-panel" style="display: none;">
+                        <div class="detail-header">
+                            <h3 class="detail-title">Conversation Details</h3>
+                            <button class="detail-close" onclick="window.claudeGrepApp.closeDetailPanel()">&times;</button>
+                        </div>
+                        <div class="detail-search">
+                            <input type="text" id="detail-search-input" placeholder="Search in conversation..." />
+                            <div class="detail-search-controls">
+                                <button id="detail-search-prev" onclick="window.claudeGrepApp.findPrevMatch()">↑</button>
+                                <button id="detail-search-next" onclick="window.claudeGrepApp.findNextMatch()">↓</button>
+                                <span id="detail-search-status"></span>
+                            </div>
+                        </div>
+                        <div id="detail-content" class="detail-content"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

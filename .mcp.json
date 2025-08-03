@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "claude-grep": {
+      "command": "node",
+      "args": [
+        "/home/neil/dev/claude-grep/dist/mcp/server.js"
+      ]
+    },
+    "mcp-chrome": {
+      "command": "node",
+      "args": [
+        "/usr/local/lib/node_modules/mcp-chrome-bridge/dist/mcp/mcp-server-stdio.js"
+      ]
+    }
+  }
+}

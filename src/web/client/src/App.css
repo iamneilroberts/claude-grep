@@ -1,0 +1,22 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px 0;
+  background-color: var(--bg-secondary);
+}
+
+.search-section {
+  margin-bottom: 40px;
+}
+
+.results-section {
+  background-color: var(--bg-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--shadow);
+  padding: 20px;
+}

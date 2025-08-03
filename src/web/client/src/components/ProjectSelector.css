@@ -1,0 +1,43 @@
+.project-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.project-select {
+  min-width: 200px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.project-select:hover {
+  border-color: var(--accent);
+}
+
+.project-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+@media (max-width: 768px) {
+  .project-selector {
+    width: 100%;
+  }
+  
+  .project-select {
+    flex: 1;
+  }
+}
